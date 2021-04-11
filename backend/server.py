@@ -6,7 +6,7 @@ from subprocess import PIPE, Popen, check_output
 from flask import Flask, abort, request, redirect, url_for, jsonify, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
-from graylog_to_vegeta.transformer import server_logs_to_vegeta_format, csv_to_json
+from graylog_to_vegeta.transformer import server_logs_to_vegeta_format, csv_to_json, search_by_timestamp, search_by_time_range
 
 app = Flask(__name__)
 CORS(app)
@@ -75,6 +75,18 @@ def get_server_logs():
     data = request.json
     log_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, data['log_file'])
     return csv_to_json(log_file)
+
+@app.route('/logs/timestamp', methods=['GET', 'POST'])
+def get_by_timestamp():
+    data = request.json
+    csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
+    return search_by_timestamp(csv_file, data['timestamp'])
+
+@app.route('/logs/time_range', methods=['GET', 'POST'])
+def get_by_time_range():
+    data = request.json
+    csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
+    return search_by_time_range(csv_file, data['start'], data['end'])
 
 if __name__ == "__main__":         
     app.run(debug=True)

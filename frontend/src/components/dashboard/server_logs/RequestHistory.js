@@ -2,6 +2,7 @@ import { Line, Bar } from 'react-chartjs-2'
 import GetServerLogs from '../../../apis/server_logs/GetServerLogs'
 import { Button } from "@chakra-ui/react"
 import { useState } from 'react'
+import TimeRangeSelector from './TimeRangeSelector'
 
 const RequestHistory = () => {
     const [requestHistory, setRequestHistory] = useState([])
@@ -90,8 +91,9 @@ const RequestHistory = () => {
                 zoom: {
                     enabled: true,
                     mode: 'x',
-                    sensitivity: 3
-                }
+                    sensitivity: 3,
+                    // drag: true,
+                },
             }
         }
     }
@@ -107,6 +109,7 @@ const RequestHistory = () => {
             >
                 Get Request History
             </Button>
+            <TimeRangeSelector />
         </>
 
     )
