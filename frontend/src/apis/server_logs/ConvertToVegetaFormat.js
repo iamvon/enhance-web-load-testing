@@ -1,12 +1,12 @@
 import API from '../api'
 
 const ConvertToVegetaFormat = async() => {
-    let data = {
+    let postData = {
         log_file: 'nginx-requests-log.csv'
     }
     
-    const res = await API.post(`logs/transformer`, data);
-    return res;
+    const data = await API.post(`logs/transformer`, postData);
+    return data;
 }
 
 export default ConvertToVegetaFormat

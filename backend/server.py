@@ -6,7 +6,7 @@ from subprocess import PIPE, Popen, check_output
 from flask import Flask, abort, request, redirect, url_for, jsonify, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
-from graylog_to_vegeta.transformer import server_logs_to_vegeta_format 
+from graylog_to_vegeta.transformer import server_logs_to_vegeta_format, csv_to_json
 
 app = Flask(__name__)
 CORS(app)
@@ -69,6 +69,12 @@ def transfer_server_logs_to_vegeta_format():
     vegeta_format_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
     res = server_logs_to_vegeta_format(server_log_file, vegeta_format_file)
     return res
+
+@app.route('/logs', methods=['GET', 'POST'])
+def get_server_logs():
+    data = request.json
+    log_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, data['log_file'])
+    return csv_to_json(log_file)
 
 if __name__ == "__main__":         
     app.run(debug=True)

@@ -7,8 +7,8 @@ const UploadServerLogs = async(file) => {
     const uploadFormData = new FormData();
     uploadFormData.append("file", file);
     
-    const res = await API.post(`logs/upload`, uploadFormData);
-    return res;
+    const data = await API.post(`logs/upload`, uploadFormData);
+    return data;
 }
 
 export default UploadServerLogs

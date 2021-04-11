@@ -36,16 +36,21 @@ def add_extra_data_by_filter_request(vegeta_format, index, request_method, conte
     return vegeta_format
 
 def server_logs_to_vegeta_format(server_logs_file, vegeta_format_file):
-    df = pandas.read_csv(server_logs_file, parse_dates=['timestamp'])
+    df = pandas.read_csv(server_logs_file)
+
     for index, row in df.iterrows():
         vegeta_format = extract_url_path_request_log(df['request'][index], df['host'][index])
         vegeta_format = add_extra_data_by_filter_request(vegeta_format, index, df['request_method'][index], df['content_type'][index], df['http_authorization'][index], df['request_body'][index]) 
         df.loc[index, 'vegeta_format'] = vegeta_format
     # Transfer server logs to vegeta format and save to new csv file
-    df.to_csv(vegeta_format_file)
+    df.to_csv(vegeta_format_file, index_label='index')
     # Read vegeta_format in dataframe to targets file
     for index, row in df.iterrows():
         targets_file_path = GRAYLOG_TO_VEGETA_FOLDER +'/vegeta/targets/' + 'targets.' + str(index) + '.txt'
         with open(targets_file_path, 'w+', encoding='utf-8') as f:
             f.write(df['vegeta_format'][index])
     return 'DONE'
+
+def csv_to_json(csv_file):
+    df = pandas.read_csv(csv_file)
+    return df.to_json()

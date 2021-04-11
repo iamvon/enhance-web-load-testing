@@ -9,39 +9,41 @@ const AttackStatistics = () => {
     const [attackThroughput, setAttackThroughput] = useState()
     const [attackRequests, setAttackRequests] = useState()
 
-    const getVegetaAttack = () => {
+    const getVegetaAttack = async () => {
         let attackLatencyData = []
         let attackThroughputData = []
         let attackRequestsData = []
-        let vegetaData = GetVegetaResult();
-        vegetaData.then((data) => {
-            if (data != undefined)
-                data.data.map(item => {
-                    attackLatencyData.push(
-                        {
-                            y: (item.latencies.mean / 1000000).toFixed(2),
-                            x: item.latest
-                        }
-                    )
+        try {
+            let data = await GetVegetaResult();
+            data.data.map(item => {
+                attackLatencyData.push(
+                    {
+                        y: (item.latencies.mean / 1000000).toFixed(2),
+                        x: item.latest
+                    }
+                )
 
-                    attackThroughputData.push(
-                        {
-                            y: item.throughput.toFixed(2),
-                            x: item.latest
-                        }
-                    )
+                attackThroughputData.push(
+                    {
+                        y: item.throughput.toFixed(2),
+                        x: item.latest
+                    }
+                )
 
-                    attackRequestsData.push(
-                        {
-                            y: item.requests,
-                            x: item.latest
-                        }
-                    )
-                })
+                attackRequestsData.push(
+                    {
+                        y: item.requests,
+                        x: item.latest
+                    }
+                )
+            })
             setAttackLatency(attackLatencyData)
             setAttackThroughput(attackThroughputData)
             setAttackRequests(attackRequestsData)
-        })
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
 
     useEffect(() => {

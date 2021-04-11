@@ -1,7 +1,7 @@
 import API from '../api'
 
 const VegetaAttack = async() => {
-    let data = {
+    let dataPost = {
         index: 3, 
         duration: 30,
         rate: 1,
@@ -9,8 +9,9 @@ const VegetaAttack = async() => {
         time_step: 100
     }
 
-    const res = await API.post(`vegeta/attack`, data);
-    // console.log(res.data)
+    const data = await API.post(`vegeta/attack`, dataPost);
+    console.log(data)
+    return data
 }
 
 export default VegetaAttack

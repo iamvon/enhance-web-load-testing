@@ -13,7 +13,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <ServerLogsDashboard />
         <nav>
           <ul>
             <li>
@@ -22,6 +21,9 @@ function App() {
           </ul>
         </nav>
         <Switch>
+          <Route exact path="/">
+            <ServerLogsDashboard />
+          </Route>
           <Route path="/attack">
             <AttackDashboard />
           </Route>

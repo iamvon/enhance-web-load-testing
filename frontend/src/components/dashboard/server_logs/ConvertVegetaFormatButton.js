@@ -2,9 +2,14 @@ import { Button } from "@chakra-ui/react"
 import ConvertToVegetaFormat from '../../../apis/server_logs/ConvertToVegetaFormat'
 
 const ConvertVegetaFormatButton = () => {
-    const convertLogToVegeta = () => {
-        const res = ConvertToVegetaFormat();
-        res.then(res => console.log(res))
+    const convertLogToVegeta = async () => {
+        try {
+            const data = await ConvertToVegetaFormat();
+            console.log(data)
+        }
+        catch(e) {
+            console.log(e)
+        }
     }
     return (
         <Button
