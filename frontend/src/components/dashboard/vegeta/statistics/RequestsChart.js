@@ -30,6 +30,23 @@ const RequestsChart = (props) => {
                     labelString: 'Number of Requests',
                 },
             }]
+        },
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            zoom: {
+                pan: {
+                    enabled: true,
+                    speed: 2,
+                    mode: 'x'
+                },
+                zoom: {
+                    enabled: true,
+                    mode: 'x',
+                    sensitivity: 3
+                }
+            }
         }
     }
 

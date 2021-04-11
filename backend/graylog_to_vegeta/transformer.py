@@ -37,7 +37,7 @@ def add_extra_data_by_filter_request(vegeta_format, index, request_method, conte
 
 def server_logs_to_vegeta_format(server_logs_file, vegeta_format_file):
     df = pandas.read_csv(server_logs_file)
-
+    df['timestamp'] = pandas.to_datetime(df['timestamp']).dt.strftime("%m/%d/%Y, %H:%M:%S")
     for index, row in df.iterrows():
         vegeta_format = extract_url_path_request_log(df['request'][index], df['host'][index])
         vegeta_format = add_extra_data_by_filter_request(vegeta_format, index, df['request_method'][index], df['content_type'][index], df['http_authorization'][index], df['request_body'][index]) 

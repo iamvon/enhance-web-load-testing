@@ -1,4 +1,5 @@
 import './App.css';
+import * as zoom from 'chartjs-plugin-zoom'
 import AttackDashboard from './components/dashboard/AttackDashboard'
 import ServerLogsDashboard from './components/dashboard/ServerLogsDashboard'
 import {

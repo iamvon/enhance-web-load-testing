@@ -36,6 +36,7 @@ const RequestHistory = () => {
                 )
             })
             setRequestHistory(requestHistoryData)
+            // console.log(requestHistory)
         }
         catch (e) {
             console.log(e)
@@ -57,15 +58,41 @@ const RequestHistory = () => {
             xAxes: [{
                 type: "time",
                 offset: true,
-                ticks: {
-                    min: 0
-                }
+                // ticks: {
+                //     min: 0
+                // },
+                barThickness: 3,
+                autoSkip: false,
+                time: {
+                    unit: 'second',
+                    unitStepSize: 2
+                },
+                scaleLabel: {
+                    display: true
+                },
             }],
             yAxes: [{
                 ticks: {
                     beginAtZero: true
                 }
             }]
+        },
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            zoom: {
+                pan: {
+                    enabled: true,
+                    speed: 2,
+                    mode: 'x'
+                },
+                zoom: {
+                    enabled: true,
+                    mode: 'x',
+                    sensitivity: 3
+                }
+            }
         }
     }
     return (
