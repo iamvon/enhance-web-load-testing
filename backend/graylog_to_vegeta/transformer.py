@@ -2,6 +2,7 @@ import pandas
 import numpy as np
 import re
 import json
+import datetime
 
 GRAYLOG_TO_VEGETA_FOLDER = '/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta'
 
@@ -53,7 +54,7 @@ def server_logs_to_vegeta_format(server_logs_file, vegeta_format_file):
 
 def csv_to_json(csv_file):
     df = pandas.read_csv(csv_file)
-    return df.to_json()
+    return df.to_json(orient='records')
 
 def search_by_timestamp(csv_file, timestamp):
     df = pandas.read_csv(csv_file)
@@ -63,7 +64,8 @@ def search_by_timestamp(csv_file, timestamp):
 def search_by_time_range(csv_file, start, end):
     res = []
     df = pandas.read_csv(csv_file)
-    start_df_idx = df[df['timestamp'] == start].iloc[0]['index']
-    end_df_idx = df[df['timestamp'] == end].iloc[-1]['index'] + 1    
-    df_time_range = df.iloc[start_df_idx:end_df_idx]
-    return df_time_range.to_json()
+    df = df.sort_values(by='timestamp')
+    mask = (df['timestamp'] >= start) & (df['timestamp'] <= end)
+    df_time_range = df.loc[mask]
+    df_time_range = df_time_range.sort_values(by='index')    
+    return df_time_range.to_json(orient='records')   

@@ -5,7 +5,7 @@ const GetServerLogs = async() => {
         log_file: 'nginx-requests-log-vegeta.csv'
     }
     
-    const data = await API.post(`logs`, postData);
+    const data = await API.post(`logs`, postData)
     return data;
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useToast } from "@chakra-ui/react"
 import UploadServerLogs from '../../../apis/server_logs/UploadServerLogs'
-import { Flex, Button, Text } from "@chakra-ui/react"
+import { Button } from "@chakra-ui/react"
 
 const UploadServerLogsButton = () => {
     const [isUploading, setIsUploading] = useState(false);

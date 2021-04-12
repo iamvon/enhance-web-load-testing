@@ -7,6 +7,7 @@ from flask import Flask, abort, request, redirect, url_for, jsonify, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from graylog_to_vegeta.transformer import server_logs_to_vegeta_format, csv_to_json, search_by_timestamp, search_by_time_range
+# from influxdb.influxdb_orm import write_data_frame_to_influxdb, init_connection
 
 app = Flask(__name__)
 CORS(app)
@@ -16,6 +17,8 @@ vegeta_result_json = '/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-te
 
 UPLOAD_SERVER_LOGS_FOLDER = '/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'}
+
+# client_influxdb, write_client_influxdb = init_connection()
 
 def get_shell_script_output_using_communicate(target_file_name, duration, rate, result_type, time_step):
     session = Popen([vegeta_script, target_file_name, duration, rate, result_type, time_step], stdout=PIPE, stderr=PIPE)
@@ -87,6 +90,17 @@ def get_by_time_range():
     data = request.json
     csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
     return search_by_time_range(csv_file, data['start'], data['end'])
+
+# @app.route('/influxdb/server_logs/import', methods=['GET',])
+# def import_server_logs_to_influxdb():
+#     csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
+#     write_data_frame_to_influxdb(client_influxdb, write_client_influxdb, csv_file, 'nginx-requests-log-vegeta')
+#     return 'import done'
+
+# @app.route('/influxdb/server_logs', methods=['GET',])
+# def get_server_logs_influxdb():
+#     csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
+#     return ''
 
 if __name__ == "__main__":         
     app.run(debug=True)

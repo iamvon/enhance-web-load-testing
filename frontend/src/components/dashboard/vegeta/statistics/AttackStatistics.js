@@ -14,8 +14,8 @@ const AttackStatistics = () => {
         let attackThroughputData = []
         let attackRequestsData = []
         try {
-            let data = await GetVegetaResult();
-            data.data.map(item => {
+            let { data } = await GetVegetaResult();
+            data.map(item => {
                 attackLatencyData.push(
                     {
                         y: (item.latencies.mean / 1000000).toFixed(2),

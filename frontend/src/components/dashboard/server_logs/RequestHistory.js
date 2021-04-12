@@ -3,25 +3,25 @@ import GetServerLogs from '../../../apis/server_logs/GetServerLogs'
 import { Button } from "@chakra-ui/react"
 import { useState } from 'react'
 import TimeRangeSelector from './TimeRangeSelector'
+import PlanList from '../server_logs/custom_load_testing_plan/PlanList'
 
 const RequestHistory = () => {
     const [requestHistory, setRequestHistory] = useState([])
+    const [requestPlan, setRequestplan] = useState([])
 
     const getRequestHistory = async () => {
         let requestHistoryData = []
         let requestHistoryDataX = []
 
         try {
-            const data = await GetServerLogs()
-            if (data != undefined)
-                // console.log(data.data)
-                Object.keys(data.data.index).map(key => {
-                    requestHistoryDataX.push(
-                        {
-                            x: data.data.timestamp[key],
-                        }
-                    )
-                });
+            const { data } = await GetServerLogs()
+            data.map(item => {
+                requestHistoryDataX.push(
+                    {
+                        x: item['timestamp'],
+                    }
+                )
+            });
 
             let counts = {}
             requestHistoryDataX.forEach(item => {
@@ -99,6 +99,17 @@ const RequestHistory = () => {
     }
     return (
         <>
+            <br />
+            <br />
+            <TimeRangeSelector setRequestHistory={setRequestHistory} />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
             <Bar
                 data={data}
                 options={options}
@@ -109,7 +120,9 @@ const RequestHistory = () => {
             >
                 Get Request History
             </Button>
-            <TimeRangeSelector />
+            <br />
+            <br />
+            <PlanList />
         </>
 
     )
