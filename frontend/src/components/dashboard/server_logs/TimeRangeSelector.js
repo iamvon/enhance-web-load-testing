@@ -8,18 +8,22 @@ import GetLogsByTimeRange from '../../../apis/server_logs/GetLogsByTimeRange'
 import format from 'date-fns/format'
 
 const TimeRangeSelector = (props) => {
-    const [startTime, setStartTime] = useState();
-    const [endTime, setEndTime] = useState();
+    const [startTime, setStartTime] = useState(new Date('04/05/2021 18:36:13'));
+    const [endTime, setEndTime] = useState(new Date('04/05/2021 18:42:05'));
 
-    const { setRequestHistory } = props
+    const { setRequestHistory, setRequestHistoryFilter } = props
 
     const getLogsByTimeRange = async () => {
         try {
             let start = format(new Date(startTime), 'MM/dd/yyyy, HH:mm:ss')
             let end = format(new Date(endTime), 'MM/dd/yyyy, HH:mm:ss')
+            setRequestHistoryFilter({
+                start: start,
+                end: end
+            })
             const { data } = await GetLogsByTimeRange(start, end)
+            
             // console.log(data)
-
             let requestHistoryData = []
             let requestHistoryDataX = []
 

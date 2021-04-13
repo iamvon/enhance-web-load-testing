@@ -7,7 +7,10 @@ import PlanList from '../server_logs/custom_load_testing_plan/PlanList'
 
 const RequestHistory = () => {
     const [requestHistory, setRequestHistory] = useState([])
-    const [requestPlan, setRequestplan] = useState([])
+    const [requestHistoryFilter, setRequestHistoryFilter] = useState({
+        start: null,
+        end: null
+    })
 
     const getRequestHistory = async () => {
         let requestHistoryData = []
@@ -101,7 +104,10 @@ const RequestHistory = () => {
         <>
             <br />
             <br />
-            <TimeRangeSelector setRequestHistory={setRequestHistory} />
+            <TimeRangeSelector
+                setRequestHistory={setRequestHistory}
+                setRequestHistoryFilter={setRequestHistoryFilter}
+            />
             <br />
             <br />
             <br />
@@ -122,7 +128,9 @@ const RequestHistory = () => {
             </Button>
             <br />
             <br />
-            <PlanList />
+            <PlanList
+                requestHistoryFilter={requestHistoryFilter}
+            />
         </>
 
     )

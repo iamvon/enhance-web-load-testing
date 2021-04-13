@@ -2,6 +2,7 @@ import './App.css';
 import * as zoom from 'chartjs-plugin-zoom'
 import AttackDashboard from './components/dashboard/AttackDashboard'
 import ServerLogsDashboard from './components/dashboard/ServerLogsDashboard'
+import MainDashboard from './components/dashboard/MainDashboard'
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,7 +14,7 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
+      {/* <div className="App"> */}
         <nav>
           <ul>
             <li>
@@ -24,12 +25,13 @@ function App() {
         <Switch>
           <Route exact path="/">
             <ServerLogsDashboard />
+            {/* <MainDashboard/> */}
           </Route>
           <Route path="/attack">
             <AttackDashboard />
           </Route>
         </Switch>
-      </div>
+      {/* </div> */}
     </Router>
 
   );

@@ -6,7 +6,7 @@ from subprocess import PIPE, Popen, check_output
 from flask import Flask, abort, request, redirect, url_for, jsonify, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
-from graylog_to_vegeta.transformer import server_logs_to_vegeta_format, csv_to_json, search_by_timestamp, search_by_time_range
+from graylog_to_vegeta.transformer import server_logs_to_vegeta_format, csv_to_json, search_by_timestamp, search_logs_by_time_range, search_plan_by_time_range
 # from influxdb.influxdb_orm import write_data_frame_to_influxdb, init_connection
 
 app = Flask(__name__)
@@ -89,7 +89,13 @@ def get_by_timestamp():
 def get_by_time_range():
     data = request.json
     csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
-    return search_by_time_range(csv_file, data['start'], data['end'])
+    return search_logs_by_time_range(csv_file, data['start'], data['end'])
+
+@app.route('/plan/time_range', methods=['GET', 'POST'])
+def get_plan_by_time_range():
+    data = request.json
+    csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
+    return search_plan_by_time_range(csv_file, data['start'], data['end'])
 
 # @app.route('/influxdb/server_logs/import', methods=['GET',])
 # def import_server_logs_to_influxdb():

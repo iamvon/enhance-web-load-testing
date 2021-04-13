@@ -15,7 +15,16 @@ def extract_url_path_request_log(request, host):
     start_url_path_pos = re.search(start_url_path_pattern, vegeta_format).start()
     vegeta_format = vegeta_format[:start_url_path_pos] + host + vegeta_format[start_url_path_pos:]
     # print(vegeta_format)
-    return vegeta_format
+    return vegeta_format.strip()
+
+def extract_endpoint_request_log(request):
+    end_url_path_pattern = 'HTTP/'  
+    start_url_path_pattern = '/'
+    end_url_path_pos = re.search(end_url_path_pattern, request).start()
+    endpoint_request_format = request[0:end_url_path_pos]
+    start_url_path_pos = re.search(start_url_path_pattern, endpoint_request_format).start()
+    endpoint_request_format = endpoint_request_format[start_url_path_pos:]
+    return endpoint_request_format.strip()
 
 def add_extra_data_by_filter_request(vegeta_format, index, request_method, content_type, http_authorization, request_body):
     if (request_method == 'POST' or request_method == 'PUT'):
@@ -33,7 +42,6 @@ def add_extra_data_by_filter_request(vegeta_format, index, request_method, conte
             vegeta_format = vegeta_format + '\n'+ 'Content-Type: ' + str(content_type) 
         if(str(http_authorization) != 'nan'):
             vegeta_format = vegeta_format + '\n' + 'Authorization: ' + str(http_authorization) 
-    
     return vegeta_format
 
 def server_logs_to_vegeta_format(server_logs_file, vegeta_format_file):
@@ -43,6 +51,9 @@ def server_logs_to_vegeta_format(server_logs_file, vegeta_format_file):
         vegeta_format = extract_url_path_request_log(df['request'][index], df['host'][index])
         vegeta_format = add_extra_data_by_filter_request(vegeta_format, index, df['request_method'][index], df['content_type'][index], df['http_authorization'][index], df['request_body'][index]) 
         df.loc[index, 'vegeta_format'] = vegeta_format
+        
+        endpoint_request_format = extract_endpoint_request_log(df['request'][index])
+        df.loc[index, 'endpoint'] = endpoint_request_format
     # Transfer server logs to vegeta format and save to new csv file
     df.to_csv(vegeta_format_file, index_label='index')
     # Read vegeta_format in dataframe to targets file
@@ -61,11 +72,24 @@ def search_by_timestamp(csv_file, timestamp):
     df = df[df['timestamp'] == timestamp]
     return df.to_json()
 
-def search_by_time_range(csv_file, start, end):
+def search_logs_by_time_range(csv_file, start, end):
+    search_logs_df = filter_by_time_range(csv_file, start, end)
+    return search_logs_df.to_json(orient='records')   
+
+def search_plan_by_time_range(csv_file, start, end):
+    if(start == None or end == None):
+        return {}
+    search_plan_df = filter_by_time_range(csv_file, start, end)
+    res = search_plan_df.sort_values(by='timestamp')
+    res = search_plan_df[['timestamp', 'request_method', 'endpoint', 'request_body', 'content_type', 'http_authorization', 'http_user_agent']]
+    res = res.groupby('timestamp').apply(lambda x: x.to_dict(orient='records')).to_json()
+    return res   
+
+def filter_by_time_range(csv_file, start, end):
     res = []
     df = pandas.read_csv(csv_file)
     df = df.sort_values(by='timestamp')
     mask = (df['timestamp'] >= start) & (df['timestamp'] <= end)
     df_time_range = df.loc[mask]
     df_time_range = df_time_range.sort_values(by='index')    
-    return df_time_range.to_json(orient='records')   
+    return df_time_range   
