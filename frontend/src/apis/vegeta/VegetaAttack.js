@@ -3,7 +3,7 @@ import API from '../api'
 const VegetaAttack = async() => {
     let dataPost = {
         index: 3, 
-        duration: 30,
+        duration: 1,
         rate: 1,
         result_type: 'json',
         time_step: 100

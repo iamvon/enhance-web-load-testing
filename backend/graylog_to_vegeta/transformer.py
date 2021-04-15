@@ -27,6 +27,7 @@ def extract_endpoint_request_log(request):
     return endpoint_request_format.strip()
 
 def add_extra_data_by_filter_request(vegeta_format, index, request_method, content_type, http_authorization, request_body):
+    request_body_file_path = ''
     if (request_method == 'POST' or request_method == 'PUT'):
         if(str(content_type) != 'nan'):
             vegeta_format = vegeta_format + '\n'+ 'Content-Type: ' + str(content_type) 
@@ -42,16 +43,16 @@ def add_extra_data_by_filter_request(vegeta_format, index, request_method, conte
             vegeta_format = vegeta_format + '\n'+ 'Content-Type: ' + str(content_type) 
         if(str(http_authorization) != 'nan'):
             vegeta_format = vegeta_format + '\n' + 'Authorization: ' + str(http_authorization) 
-    return vegeta_format
+    return vegeta_format, request_body_file_path
 
 def server_logs_to_vegeta_format(server_logs_file, vegeta_format_file):
     df = pandas.read_csv(server_logs_file)
     df['timestamp'] = pandas.to_datetime(df['timestamp']).dt.strftime("%m/%d/%Y, %H:%M:%S")
     for index, row in df.iterrows():
         vegeta_format = extract_url_path_request_log(df['request'][index], df['host'][index])
-        vegeta_format = add_extra_data_by_filter_request(vegeta_format, index, df['request_method'][index], df['content_type'][index], df['http_authorization'][index], df['request_body'][index]) 
+        vegeta_format, request_body_file_path = add_extra_data_by_filter_request(vegeta_format, index, df['request_method'][index], df['content_type'][index], df['http_authorization'][index], df['request_body'][index]) 
         df.loc[index, 'vegeta_format'] = vegeta_format
-        
+        df.loc[index, 'request_body_file'] = request_body_file_path
         endpoint_request_format = extract_endpoint_request_log(df['request'][index])
         df.loc[index, 'endpoint'] = endpoint_request_format
     # Transfer server logs to vegeta format and save to new csv file
@@ -81,7 +82,7 @@ def search_plan_by_time_range(csv_file, start, end):
         return {}
     search_plan_df = filter_by_time_range(csv_file, start, end)
     res = search_plan_df.sort_values(by='timestamp')
-    res = search_plan_df[['timestamp', 'request_method', 'endpoint', 'request_body', 'content_type', 'http_authorization', 'http_user_agent']]
+    res = search_plan_df[['timestamp', 'request_method', 'endpoint', 'request_body', 'content_type', 'http_authorization', 'http_user_agent', 'index']]
     res = res.groupby('timestamp').apply(lambda x: x.to_dict(orient='records')).to_json()
     return res   
 

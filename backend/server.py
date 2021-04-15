@@ -7,6 +7,7 @@ from flask import Flask, abort, request, redirect, url_for, jsonify, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from graylog_to_vegeta.transformer import server_logs_to_vegeta_format, csv_to_json, search_by_timestamp, search_logs_by_time_range, search_plan_by_time_range
+from load_testing_plan.plan_processing import run_plan
 # from influxdb.influxdb_orm import write_data_frame_to_influxdb, init_connection
 
 app = Flask(__name__)
@@ -96,6 +97,12 @@ def get_plan_by_time_range():
     data = request.json
     csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
     return search_plan_by_time_range(csv_file, data['start'], data['end'])
+
+@app.route('/plan/run', methods=['GET', 'POST'])
+def run_load_testing_plan():
+    data = request.json
+    return run_plan(data)
+    
 
 # @app.route('/influxdb/server_logs/import', methods=['GET',])
 # def import_server_logs_to_influxdb():
