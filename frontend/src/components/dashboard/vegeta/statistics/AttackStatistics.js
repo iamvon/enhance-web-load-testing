@@ -4,17 +4,23 @@ import ResponseTimeChart from './ResponseTimeChart'
 import RequestsChart from './RequestsChart'
 import ThroughputChart from './ThroughputChart'
 
-const AttackStatistics = () => {
+const AttackStatistics = (props) => {
     const [attackLatency, setAttackLatency] = useState()
     const [attackThroughput, setAttackThroughput] = useState()
     const [attackRequests, setAttackRequests] = useState()
+
+    const { requestPlanIdx, clearChart, setClearChart, resultFolder } = props
 
     const getVegetaAttack = async () => {
         let attackLatencyData = []
         let attackThroughputData = []
         let attackRequestsData = []
         try {
-            let { data } = await GetVegetaResult();
+            let postData = {
+                request_idx: requestPlanIdx,
+                result_folder: resultFolder
+            }
+            let { data } = await GetVegetaResult(postData);
             data.map(item => {
                 attackLatencyData.push(
                     {
@@ -52,7 +58,16 @@ const AttackStatistics = () => {
             // console.log(attackLatency.length)
         }, 1000);
         return () => clearInterval(interval);
-    }, []);
+    }, [requestPlanIdx, resultFolder]);
+
+    useEffect(() => {
+        if (clearChart) {
+            setAttackLatency([])
+            setAttackThroughput([])
+            setAttackRequests([])
+            setClearChart(false)
+        }
+    }, [clearChart])
 
     return (
         <>

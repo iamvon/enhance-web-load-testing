@@ -1,7 +1,8 @@
 import API from '../api'
 
-const GetVegetaResult = async() => {
-    const data = await API.get(`vegeta/result/json`);
+const GetVegetaResult = async(postData) => {
+    // console.log(postData)
+    const data = await API.post(`vegeta/result/json`, postData);
     return data;
 }
 

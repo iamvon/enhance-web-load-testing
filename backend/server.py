@@ -8,13 +8,15 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from graylog_to_vegeta.transformer import server_logs_to_vegeta_format, csv_to_json, search_by_timestamp, search_logs_by_time_range, search_plan_by_time_range
 from load_testing_plan.plan_processing import run_plan
+from datetime import datetime
+import threading
 # from influxdb.influxdb_orm import write_data_frame_to_influxdb, init_connection
 
 app = Flask(__name__)
 CORS(app)
 
 vegeta_script = '/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta/vegeta/scripts/' + 'load-test.sh'
-vegeta_result_json = '/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta/vegeta/results/json/' + 'result.3.json'
+vegeta_result_json_path = '/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta/vegeta/results/json/' 
 
 UPLOAD_SERVER_LOGS_FOLDER = '/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'}
@@ -28,14 +30,29 @@ def get_shell_script_output_using_communicate(target_file_name, duration, rate, 
         raise Exception("Error "+str(stderr))
     return stdout.decode('utf-8')
 
-@app.route('/vegeta/result/json', methods=['GET'])
+@app.route('/vegeta/result/json', methods=['GET', 'POST'])
 def get_vegeta_result_json():
-    data = []
-    with open(vegeta_result_json) as json_data:
-        for line in json_data:
-            data.append(json.loads(line))
-    print(len(data))        
-    return jsonify(data)
+    res = []
+    data = request.json
+    if(data['result_folder'] == None):
+        print(len(res))
+        return jsonify(res)
+    result_file_list = []   
+    result_file_path = ''    
+    request_idx_data = data['request_idx']
+    vegeta_result_json = vegeta_result_json_path + data['result_folder']
+    for request_idx in request_idx_data:
+        result_file_path = vegeta_result_json +  '/result.' + str(request_idx) + '.json' 
+        result_file_list.append(result_file_path)
+    for result_file in result_file_list:
+        try:
+            with open(result_file) as json_data:
+                for line in json_data:
+                    res.append(json.loads(line))
+        except EnvironmentError: # parent of IOError, OSError *and* WindowsError where available
+            continue
+    print(len(res))
+    return jsonify(res)
 
 @app.route('/vegeta/attack', methods=['POST'])
 def vegeta_attack():
@@ -98,10 +115,17 @@ def get_plan_by_time_range():
     csv_file = os.path.join(UPLOAD_SERVER_LOGS_FOLDER, 'nginx-requests-log-vegeta.csv')
     return search_plan_by_time_range(csv_file, data['start'], data['end'])
 
+def run_plan_threaded(plan_func, req_idx, result_folder):
+    plan_thread = threading.Thread(target=plan_func, args=(req_idx, result_folder,))
+    plan_thread.start()
+
 @app.route('/plan/run', methods=['GET', 'POST'])
 def run_load_testing_plan():
     data = request.json
-    return run_plan(data)
+    now = datetime.now()
+    result_folder = now.strftime("%m-%d-%Y_%H:%M:%S")   
+    run_plan_threaded(run_plan, data, result_folder)
+    return result_folder
     
 
 # @app.route('/influxdb/server_logs/import', methods=['GET',])

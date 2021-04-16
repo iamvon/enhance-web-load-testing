@@ -3,23 +3,30 @@ import { useState, useEffect } from 'react'
 import GetPlanByTimeRange from '../../../../apis/vegeta/GetPlanByTimeRange'
 import { Button } from "@chakra-ui/react"
 import RunPlanByTimeRange from '../../../../apis/vegeta/RunPlanByTimeRange'
+import AttackStatistics from '../../vegeta/statistics/AttackStatistics'
 
 const PlanList = (props) => {
     const [requestPlan, setRequestplan] = useState({})
+    const [requestPlanIdx, setRequestPlanIdx] = useState([])
+    const [clearChart, setClearChart] = useState(false)
+    const [resultFolder, setResultFolder] = useState(null)
+
     const { requestHistoryFilter } = props
 
     useEffect(async () => {
         try {
             // console.log(requestHistoryFilter)
+            let setRequestPlanIdxData = []
             const { data } = await GetPlanByTimeRange(requestHistoryFilter)
             setRequestplan(data)
-            // Object.keys(data).map(key => {
-            //     data[key].map(item => {
-            //         console.log(key, item)
-            //     }
-            //     )
-            // });
-
+            Object.keys(data).map(key => {
+                data[key].map(item => {
+                    setRequestPlanIdxData.push(item['index'])
+                }
+                )
+            });
+            setRequestPlanIdx(setRequestPlanIdxData)
+            // console.log(requestPlanIdx)
         }
         catch (e) {
         }
@@ -98,10 +105,14 @@ const PlanList = (props) => {
 
             <Button
                 colorScheme="blue"
-                onClick={() => RunPlanByTimeRange(requestPlan)}
+                onClick={async() => {
+                    const {data} = await RunPlanByTimeRange(requestPlan)
+                    setResultFolder(data)
+                }}
             >
-                Run Load Testing Plan 
+                Run Load Testing Plan
             </Button>
+            <AttackStatistics requestPlanIdx={requestPlanIdx} clearChart={clearChart} setClearChart={setClearChart} resultFolder={resultFolder} />
         </>
     )
 }

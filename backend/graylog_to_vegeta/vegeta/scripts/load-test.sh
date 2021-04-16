@@ -4,12 +4,14 @@ duration=$2
 rate=$3
 result_type=$4
 time_step=$5
+result_folder=$6
 
 vegeta=$HOME/Documents/Nam_4/Khoa_luan/vegeta_12.8.4_linux_amd64/vegeta 
 vegeta_data=$HOME/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta/vegeta
 target_file=$vegeta_data/targets/targets.$index.txt 
 results_file_bin=$vegeta_data/results/bin/result.$index.bin
-results_file_json=$vegeta_data/results/json/result.$index.json
+results_folder_json=$vegeta_data/results/json/$result_folder
+results_file_json=$results_folder_json/result.$index.json
 
 if [[ $result_type == "bin" ]]   
 then 
