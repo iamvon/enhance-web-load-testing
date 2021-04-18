@@ -56,6 +56,8 @@ const AttackStatistics = (props) => {
         const interval = setInterval(() => {
             getVegetaAttack()
             // console.log(attackLatency.length)
+            console.log('requestPlanIdx; ', requestPlanIdx)
+            console.log('resultFolder: ', resultFolder)
         }, 1000);
         return () => clearInterval(interval);
     }, [requestPlanIdx, resultFolder]);
@@ -71,9 +73,25 @@ const AttackStatistics = (props) => {
 
     return (
         <>
-            <RequestsChart attackRequests={attackRequests} />
-            <ThroughputChart attackThroughput={attackThroughput} />
-            <ResponseTimeChart attackLatency={attackLatency} />
+            {/* <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
+                <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+                    <div className="rounded-t mb-0 px-4 py-3 border-0">
+                        <div className="flex flex-wrap items-center">
+                            <div className="relative w-full px-4 max-w-full flex-grow flex-1"> */}
+            <div className="w-full xl:w-1/3 mb-12 xl:mb-0 px-4 mb-20">
+                <RequestsChart attackRequests={attackRequests} />
+            </div>
+            <div className="w-full xl:w-1/3 mb-12 xl:mb-0 px-4">
+                <ThroughputChart attackThroughput={attackThroughput} />
+            </div>
+            <div className="w-full xl:w-1/3 mb-12 xl:mb-0 px-4">
+                <ResponseTimeChart attackLatency={attackLatency} />
+            </div>
+            {/* </div>
+                        </div>
+                    </div>
+                </div>
+            </div> */}
         </>
     )
 }

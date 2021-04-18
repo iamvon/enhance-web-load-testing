@@ -1,9 +1,8 @@
-import { Line, Bar } from 'react-chartjs-2'
 import GetServerLogs from '../../../apis/server_logs/GetServerLogs'
-import { Button } from "@chakra-ui/react"
 import { useState } from 'react'
-import TimeRangeSelector from './TimeRangeSelector'
 import PlanList from '../server_logs/custom_load_testing_plan/PlanList'
+import RequestHistoryBarChart from './charts/RequestHistoryBarChart'
+import AttackStatistics from '../vegeta/statistics/AttackStatistics'
 
 const RequestHistory = () => {
     const [requestHistory, setRequestHistory] = useState([])
@@ -11,6 +10,9 @@ const RequestHistory = () => {
         start: null,
         end: null
     })
+    const [requestPlanIdx, setRequestPlanIdx] = useState([])
+    const [clearChart, setClearChart] = useState(false)
+    const [resultFolder, setResultFolder] = useState(null)
 
     const getRequestHistory = async () => {
         let requestHistoryData = []
@@ -47,90 +49,39 @@ const RequestHistory = () => {
         }
     }
 
-    const data = {
-        labels: [],
-        datasets: [{
-            label: "Requests",
-            data: requestHistory,
-            backgroundColor: "blue",
-            borderWidth: 1,
-        }]
-    }
-
-    let options = {
-        scales: {
-            xAxes: [{
-                type: "time",
-                offset: true,
-                // ticks: {
-                //     min: 0
-                // },
-                barThickness: 3,
-                autoSkip: false,
-                time: {
-                    unit: 'second',
-                    unitStepSize: 2
-                },
-                scaleLabel: {
-                    display: true
-                },
-            }],
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        },
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            zoom: {
-                pan: {
-                    enabled: true,
-                    speed: 2,
-                    mode: 'x'
-                },
-                zoom: {
-                    enabled: true,
-                    mode: 'x',
-                    sensitivity: 3,
-                    // drag: true,
-                },
-            }
-        }
-    }
     return (
         <>
-            <br />
-            <br />
-            <TimeRangeSelector
-                setRequestHistory={setRequestHistory}
-                setRequestHistoryFilter={setRequestHistoryFilter}
-            />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <Bar
-                data={data}
-                options={options}
-            />
-            <Button
-                colorScheme="blue"
-                onClick={() => getRequestHistory()}
-            >
-                Get Request History
-            </Button>
-            <br />
-            <br />
-            <PlanList
-                requestHistoryFilter={requestHistoryFilter}
-            />
+            <div className="relative bg-pink-700 md:pt-32 pb-32 pt-12">
+                <div className="px-4 md:px-10 mx-auto w-full">
+
+                </div>
+            </div>
+            <div className="px-4 md:px-10 mx-auto w-full -m-24">
+                <div className="flex flex-wrap">
+                    <RequestHistoryBarChart
+                        requestHistory={requestHistory}
+                        setRequestHistory={setRequestHistory}
+                        getRequestHistory={getRequestHistory}
+                        setRequestHistoryFilter={setRequestHistoryFilter}
+                    />
+                    <PlanList
+                        requestHistoryFilter={requestHistoryFilter}
+                        setResultFolder={setResultFolder}
+                        setRequestPlanIdx={setRequestPlanIdx}
+                    />
+                </div>
+                <div className="flex flex-wrap mt-4">
+                    <AttackStatistics
+                        requestPlanIdx={requestPlanIdx}
+                        clearChart={clearChart}
+                        setClearChart={setClearChart}
+                        resultFolder={resultFolder}
+                        setClearChart={setClearChart}
+                        setResultFolder={setResultFolder}
+                        requestHistoryFilter={requestHistoryFilter}
+                    />
+                </div>
+            </div>
         </>
 
     )

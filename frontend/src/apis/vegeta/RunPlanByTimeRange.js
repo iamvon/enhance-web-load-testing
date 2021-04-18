@@ -2,7 +2,7 @@ import API from '../api'
 
 const RunPlanByTimeRange = async (postData) => {
     const data = await API.post(`plan/run`, postData);
-    console.log(data)
+    // console.log(data)
     return data;
 }
 

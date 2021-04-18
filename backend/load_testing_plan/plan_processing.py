@@ -21,7 +21,7 @@ def get_shell_script_output_using_communicate(target_file_name, duration, rate, 
     return stdout.decode('utf-8')
 
 def vegeta_attack(req_idx, result_folder):
-    return get_shell_script_output_using_communicate(str(req_idx), str(1), str(1), 'json', str(100), result_folder)
+    return get_shell_script_output_using_communicate(str(req_idx), str(30), str(1), 'json', str(100), result_folder)
 
 def run_vegeta_attack_threaded(job_func, req_idx, result_folder):
     job_thread = threading.Thread(target=job_func, args=(req_idx, result_folder,))

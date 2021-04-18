@@ -58,6 +58,7 @@ const TimeRangeSelector = (props) => {
     return (
         <>
             <Grid
+                className="flex-auto -ml-10 mt-3"
                 h="100px"
                 w="1000px"
                 templateRows="repeat(2, 1fr)"
