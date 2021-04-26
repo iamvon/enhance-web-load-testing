@@ -3,16 +3,18 @@ import { useState, useEffect } from 'react'
 import GetPlanByTimeRange from '../../../../apis/vegeta/GetPlanByTimeRange'
 import { Button } from "@chakra-ui/react"
 import RunPlanByTimeRange from '../../../../apis/vegeta/RunPlanByTimeRange'
+import RequestDetailModal from './RequestDetailModal'
 
 const PlanList = (props) => {
     const [requestPlan, setRequestplan] = useState({})
-
+    const [showRequestDetailModal, setShowRequestDetailModal] = useState(false)
     const { requestHistoryFilter, setResultFolder, setRequestPlanIdx } = props
 
     useEffect(async () => {
         try {
             let setRequestPlanIdxData = []
             const { data } = await GetPlanByTimeRange(requestHistoryFilter)
+            console.log('Data: ', data)
             setRequestplan(data)
             Object.keys(data).map(key => {
                 data[key].map(item => {
@@ -34,10 +36,10 @@ const PlanList = (props) => {
                     <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
                         <div className="flex flex-wrap items-center">
                             <div className="relative w-full max-w-full flex-grow flex-1">
-                                <h6 className="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
+                                <h6 className="uppercase text-gray-400 mb-1 text-xs font-semibold">
                                     Plan List
                                 </h6>
-                                <h2 className="text-blueGray-700 text-xl font-semibold">
+                                <h2 className="text-gray-700 text-xl font-semibold">
                                     Load Testing Plan
                                 </h2>
                             </div>
@@ -95,9 +97,20 @@ const PlanList = (props) => {
                                                                             </span>
                                                                         </div>
                                                                         <div class="ml-4 flex-shrink-0">
-                                                                            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                                            <a
+                                                                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                                                                                onClick={() => {
+                                                                                    setShowRequestDetailModal(true)
+                                                                                    // <RequestDetailModal
+                                                                                    //     RequestDetailModal={showRequestDetailModal}
+                                                                                    // />
+                                                                                }}
+                                                                            >
                                                                                 Detail
-                                                                        </a>
+                                                                            </a>
+                                                                            {/* {showRequestDetailModal ? (
+                                                                              <RequestDetailModal/>
+                                                                            ) : null} */}
                                                                         </div>
                                                                         {/* <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

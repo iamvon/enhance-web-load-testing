@@ -83,10 +83,7 @@ const RequestHistory = () => {
                 </div>
             </div>
         </>
-
     )
-
-
 }
 
 export default RequestHistory

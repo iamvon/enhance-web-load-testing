@@ -17,9 +17,17 @@ const RequestsChart = (props) => {
             xAxes: [{
                 type: 'time',
                 distribution: 'linear',
+                scaleLabel: {
+                    display: true,
+                    labelString: "Timestamp"
+                },
             }],
             title: {
                 display: false,
+            },
+            time: {
+                unit: 'second',
+                unitStepSize: 5
             },
             yAxes: [{
                 ticks: {

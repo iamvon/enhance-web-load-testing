@@ -55,9 +55,6 @@ const AttackStatistics = (props) => {
     useEffect(() => {
         const interval = setInterval(() => {
             getVegetaAttack()
-            // console.log(attackLatency.length)
-            console.log('requestPlanIdx; ', requestPlanIdx)
-            console.log('resultFolder: ', resultFolder)
         }, 1000);
         return () => clearInterval(interval);
     }, [requestPlanIdx, resultFolder]);
