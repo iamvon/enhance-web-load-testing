@@ -1,0 +1,1 @@
+GET http://3.208.148.212/css/bookstore.css

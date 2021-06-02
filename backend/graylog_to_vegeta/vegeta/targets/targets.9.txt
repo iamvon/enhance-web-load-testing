@@ -1,4 +1,1 @@
-POST http://127.0.0.1/greeting
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwaGFtbWluaHR1YW4xMmExQGdtYWlsLmNvbSIsImV4cCI6MTYxNTM5MTc3OSwiaWF0IjoxNjE1MzQ4NTc5fQ.-ltniu8H6P-PDHMSG1jjYV4vWPKiTnT9MVvLdJQgdIaUQOq2mKYMApZ3yTzOW3WqVRruDlsyAUjAbL3ZnA-MdA
-@/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta/request_body/9.json
+GET http://3.208.148.212/js/controller/OrderController.js

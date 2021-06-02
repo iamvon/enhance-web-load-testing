@@ -49,8 +49,8 @@ const RequestHistoryBarChart = (props) => {
             yAxes: [{
                 display: true,
                 scaleLabel: {
-                    display: false,
-                    labelString: "Value"
+                    display: true,
+                    labelString: "Number of requests"
                 },
                 gridLines: {
                     borderDash: [2],
@@ -110,6 +110,7 @@ const RequestHistoryBarChart = (props) => {
                             </Button>
                         </div>
                         <TimeRangeSelector
+                            requestHistory={requestHistory}
                             setRequestHistory={setRequestHistory}
                             setRequestHistoryFilter={setRequestHistoryFilter}
                         />

@@ -1,0 +1,3 @@
+PUT http://3.208.148.212/rest/books/17
+Content-Type: application/json;charset=UTF-8
+@/home/tuanpm/Documents/Nam_4/Khoa_luan/enhance-web-load-testing/backend/graylog_to_vegeta/request_body/39.json

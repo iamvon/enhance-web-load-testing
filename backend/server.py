@@ -79,7 +79,8 @@ def upload_server_logs():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_SERVER_LOGS_FOLDER, filename))
+            new_filename = 'nginx-requests-log.csv'
+            file.save(os.path.join(UPLOAD_SERVER_LOGS_FOLDER, new_filename))
             return 'File uploaded successfully!'
     abort(404)
 

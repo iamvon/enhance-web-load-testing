@@ -1,0 +1,17 @@
+{
+	"ulid": "01F76K1N4NB9M347TGD2S3AT4T",
+	"minTime": 1619654402523,
+	"maxTime": 1619661600000,
+	"stats": {
+		"numSamples": 95928,
+		"numSeries": 1055,
+		"numChunks": 1055
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01F76K1N4NB9M347TGD2S3AT4T"
+		]
+	},
+	"version": 1
+}

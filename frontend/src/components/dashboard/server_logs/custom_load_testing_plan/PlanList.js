@@ -14,12 +14,11 @@ const PlanList = (props) => {
         try {
             let setRequestPlanIdxData = []
             const { data } = await GetPlanByTimeRange(requestHistoryFilter)
-            console.log('Data: ', data)
             setRequestplan(data)
             Object.keys(data).map(key => {
                 data[key].map(item => {
                     setRequestPlanIdxData.push(item['index'])
-                }
+                    }
                 )
             });
             setRequestPlanIdx(setRequestPlanIdxData)

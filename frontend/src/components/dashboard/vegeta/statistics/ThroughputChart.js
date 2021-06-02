@@ -1,4 +1,4 @@
-import { Line } from 'react-chartjs-2'
+import { Line, Bar } from 'react-chartjs-2'
 
 const ThroughputChart = (props) => {
     const { attackThroughput } = props
@@ -7,36 +7,60 @@ const ThroughputChart = (props) => {
         datasets: [{
             data: attackThroughput,
             label: "Load Testing Throughput",
-            borderColor: "#3e95cd",
-            fill: false
+            fill: false,
+            barThickness: 8,
+            backgroundColor: "#4cc8e1",
+            borderColor: "#58d1c3",
         }]
     }
 
-    const options = {
+    let options = {
         scales: {
             xAxes: [{
-                type: 'time',
-                distribution: 'linear',
+                type: "time",
+                offset: true,
+                // ticks: {
+                //     min: 0
+                // },
+                barThickness: 8,
+                autoSkip: false,
+                time: {
+                    unit: 'second',
+                    unitStepSize: 5
+                },
+                // display: false,
                 scaleLabel: {
                     display: true,
                     labelString: "Timestamp"
                 },
+                gridLines: {
+                    borderDash: [2],
+                    borderDashOffset: [2],
+                    color: "rgba(33, 37, 41, 0.3)",
+                    zeroLineColor: "rgba(33, 37, 41, 0.3)",
+                    zeroLineBorderDash: [2],
+                    zeroLineBorderDashOffset: [2]
+                }
             }],
-            title: {
-                display: false,
-            },
-            time: {
-                unit: 'second',
-                unitStepSize: 5
-            },
             yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                },
+                display: true,
                 scaleLabel: {
-                    display: true,
-                    labelString: 'Throughput (req/s)',
+                    display: false,
+                    labelString: "Value"
                 },
+                gridLines: {
+                    borderDash: [2],
+                    drawBorder: false,
+                    borderDashOffset: [2],
+                    color: "rgba(33, 37, 41, 0.2)",
+                    zeroLineColor: "rgba(33, 37, 41, 0.15)",
+                    zeroLineBorderDash: [2],
+                    zeroLineBorderDashOffset: [2]
+                },
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1
+                }
             }]
         },
         plugins: {
@@ -52,16 +76,63 @@ const ThroughputChart = (props) => {
                 zoom: {
                     enabled: true,
                     mode: 'x',
-                    sensitivity: 3
-                }
+                    sensitivity: 3,
+                    // drag: true,
+                },
             }
         }
     }
 
+    // const options = {
+    //     scales: {
+    //         xAxes: [{
+    //             type: 'time',
+    //             distribution: 'linear',
+    //             scaleLabel: {
+    //                 display: true,
+    //                 labelString: "Timestamp"
+    //             },
+    //         }],
+    //         title: {
+    //             display: false,
+    //         },
+    //         time: {
+    //             unit: 'second',
+    //             unitStepSize: 5
+    //         },
+    //         yAxes: [{
+    //             ticks: {
+    //                 beginAtZero: true
+    //             },
+    //             scaleLabel: {
+    //                 display: true,
+    //                 labelString: 'Throughput (req/s)',
+    //             },
+    //         }]
+    //     },
+    //     plugins: {
+    //         legend: {
+    //             position: 'top',
+    //         },
+    //         zoom: {
+    //             pan: {
+    //                 enabled: true,
+    //                 speed: 2,
+    //                 mode: 'x'
+    //             },
+    //             zoom: {
+    //                 enabled: true,
+    //                 mode: 'x',
+    //                 sensitivity: 3
+    //             }
+    //         }
+    //     }
+    // }
+
     return (
         <>
             <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
-                <Line
+                <Bar
                     data={data}
                     options={options}
                 />

@@ -1,4 +1,1 @@
-{
-    "id": 0,
-    "name": "Tuan"
-}
+{"id":2,"version":7,"isbn":"9123238861","name":"Python Crash Course","description":"Python Crash Course is the world's best-selling guide to the Python programming language. This fast-paced, thorough introduction to programming with Python will have you writing programs, solving problems, and making things that work in no time.","pictureURL":"https://images-na.ssl-images-amazon.com/images/I/51Z6Vf5UwTL._SX376_BO1,204,203,200_.jpg","price":"24.51","vat":null,"author":"Eric Matthes"}

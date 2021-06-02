@@ -3,6 +3,8 @@ import { useState } from 'react'
 import PlanList from '../server_logs/custom_load_testing_plan/PlanList'
 import RequestHistoryBarChart from './charts/RequestHistoryBarChart'
 import AttackStatistics from '../vegeta/statistics/AttackStatistics'
+import UploadServerLogsButton from './UploadServerLogsButton'
+import ConvertVegetaFormatButton from './ConvertVegetaFormatButton'
 
 const RequestHistory = () => {
     const [requestHistory, setRequestHistory] = useState([])
@@ -42,7 +44,7 @@ const RequestHistory = () => {
                 )
             })
             setRequestHistory(requestHistoryData)
-            // console.log(requestHistory)
+            console.log(requestHistory)
         }
         catch (e) {
             console.log(e)
@@ -53,7 +55,8 @@ const RequestHistory = () => {
         <>
             <div className="relative bg-pink-700 md:pt-32 pb-32 pt-12">
                 <div className="px-4 md:px-10 mx-auto w-full">
-
+                    <UploadServerLogsButton/>
+                    <ConvertVegetaFormatButton/>
                 </div>
             </div>
             <div className="px-4 md:px-10 mx-auto w-full -m-24">

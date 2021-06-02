@@ -66,6 +66,7 @@ def server_logs_to_vegeta_format(server_logs_file, vegeta_format_file):
 
 def csv_to_json(csv_file):
     df = pandas.read_csv(csv_file)
+    df = df.sort_values(by='timestamp')
     return df.to_json(orient='records')
 
 def search_by_timestamp(csv_file, timestamp):
@@ -92,5 +93,5 @@ def filter_by_time_range(csv_file, start, end):
     df = df.sort_values(by='timestamp')
     mask = (df['timestamp'] >= start) & (df['timestamp'] <= end)
     df_time_range = df.loc[mask]
-    df_time_range = df_time_range.sort_values(by='index')    
+    df_time_range = df_time_range.sort_values(by='timestamp')    
     return df_time_range   

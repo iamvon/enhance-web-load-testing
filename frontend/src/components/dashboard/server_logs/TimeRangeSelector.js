@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import './css/date-picker.css';
@@ -7,11 +7,13 @@ import { TimeIcon } from '@chakra-ui/icons'
 import GetLogsByTimeRange from '../../../apis/server_logs/GetLogsByTimeRange'
 import format from 'date-fns/format'
 
-const TimeRangeSelector = (props) => {
-    const [startTime, setStartTime] = useState(new Date('04/05/2021 18:41:10'));
-    const [endTime, setEndTime] = useState(new Date('04/05/2021 18:42:40'));
+const TimeRangeSelector = (props) => {    
+    const { setRequestHistory, setRequestHistoryFilter, requestHistory } = props
+    
+    const [startTime, setStartTime] = useState();
+    const [endTime, setEndTime] = useState();
 
-    const { setRequestHistory, setRequestHistoryFilter } = props
+    // requestHistory[0]; requestHistory[requestHistory.length-1]
 
     const getLogsByTimeRange = async () => {
         try {
@@ -54,6 +56,14 @@ const TimeRangeSelector = (props) => {
             console.log(e)
         }
     }
+
+    useEffect(() => {
+        if(requestHistory != undefined && requestHistory.length > 0) {
+            setStartTime(new Date(requestHistory[0]['x'].replace(/,/g, '')))
+            setEndTime(new Date (requestHistory[requestHistory.length-1]['x'].replace(/,/g, '')))
+        }
+    }, [requestHistory]);
+
 
     return (
         <>
